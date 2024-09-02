@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SelectBudgetOptions, SelectTraveleroptions } from "@/constants/options";
+import {
+  SelectBudgetOptions,
+  SelectTraveleroptions,
+} from "@/constants/options";
 import React, { useEffect, useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 
@@ -9,32 +12,33 @@ function CreateTrip() {
 
   const [formData, setFormData] = useState([]);
 
-  const handleInpuChange=(name,value)=>{
-
+  const handleInpuChange = (name, value) => {
     // if(name=='noOfdays'&&value>5){
     //   alert('no of days should be less than 5');
     //   return ;
     // }
     setFormData({
       ...formData,
-      [name]:value
-    })
-  }
+      [name]: value,
+    });
+  };
 
   useEffect(() => {
     console.log(formData);
   }, [formData]);
 
-  const OnGenerateTrip=()=>{
-    if(formData?.noOfdays>5){
-      alert('no of days should be less than 5');
-      return ;
+  const OnGenerateTrip = () => {
+    if (formData?.noOfdays > 5) {
+      alert("no of days should be less than 5");
+      return;
     }
-    console.log(formData)
-  }
+    console.log(formData);
+  };
   return (
     <div className="sm:px-10 md:px-32 lg:px-56 xl:px-10 px-5 mt-10">
-      <h2 className="text-3xl font-bold">Tell us your travel preferences 🌴🏕️</h2>
+      <h2 className="text-3xl font-bold">
+        Tell us your travel preferences 🌴🏕️
+      </h2>
       <p className="mt-3 text-gray-500 text-xl">
         Just provide some basic information, and our trip planner will generate
         a customized itinerary based on your preferences.
@@ -50,7 +54,7 @@ function CreateTrip() {
               place,
               onChange: (v) => {
                 setPlace(v);
-                handleInpuChange('location');
+                handleInpuChange("location");
               },
             }}
           />
@@ -61,7 +65,11 @@ function CreateTrip() {
             How many days are you planning your trip?
           </h2>
 
-          <Input placeholder={"Ex.3"} type={"number"} onChange={(e)=>handleInpuChange('noOfdays',e.target.value)} />
+          <Input
+            placeholder={"Ex.3"}
+            type={"number"}
+            onChange={(e) => handleInpuChange("noOfdays", e.target.value)}
+          />
         </div>
       </div>
 
@@ -76,9 +84,11 @@ function CreateTrip() {
           {SelectBudgetOptions.map((item, index) => (
             <div
               key={index}
-              onClick={()=>handleInpuChange('budget',item.title)}
+              onClick={() => handleInpuChange("budget", item.title)}
               className={`p-4 border cursor-pointer rounded-lg hover:shadow-lg
-                  ${formData.budget === item.title&&'shadow-lg border-black'}  
+                  ${
+                    formData.budget === item.title && "shadow-lg border-black"
+                  }  
                 `}
             >
               <h2 className="text-4xl">{item.icon}</h2>
@@ -97,9 +107,12 @@ function CreateTrip() {
           {SelectTraveleroptions.map((item, index) => (
             <div
               key={index}
-              onClick={()=>handleInpuChange('NumberofTravelers',item.people)}
+              onClick={() => handleInpuChange("NumberofTravelers", item.people)}
               className={`p-4 border cursor-pointer rounded-lg hover:shadow-lg
-                ${formData.NumberofTravelers === item.people&&'shadow-lg border-black'}  
+                ${
+                  formData.NumberofTravelers === item.people &&
+                  "shadow-lg border-black"
+                }  
               `}
             >
               <h2 className="text-4xl">{item.icon}</h2>
@@ -111,11 +124,9 @@ function CreateTrip() {
       </div>
 
       <div className="mt-20 items-center justify-center flex">
-      <Button onClick={OnGenerateTrip}>Generate Trip</Button>
+        <Button onClick={OnGenerateTrip}>Generate Trip</Button>
       </div>
     </div>
-
-    
   );
 }
 
