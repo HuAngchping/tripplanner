@@ -1,15 +1,14 @@
 import { useState } from 'react'
 import './App.css'
 import { Button } from './components/ui/button'
+import Hero from './components/ui/custom/Hero'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-  <h2>Hello World</h2>
-  <Button onClick={() => setCount(count + 1)}>Button</Button>
-  <p>Count: {count}</p>
+      <Hero/>
     </>
   )
 }
