@@ -1,25 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  AI_PROMPT,
   SelectBudgetOptions,
   SelectTraveleroptions,
 } from "@/constants/options";
+import { chatSession } from "@/service/AIModal";
 import React, { useEffect, useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+import { toast } from "sonner";
 
 function CreateTrip() {
   const [place, setPlace] = useState();
 
   const [formData, setFormData] = useState([]);
 
-  const handleInpuChange = (name, value) => {
-    // if(name=='noOfdays'&&value>5){
-    //   alert('no of days should be less than 5');
-    //   return ;
-    // }
+  const handleInputChange = (name, value) => {
     setFormData({
       ...formData,
-      [name]: value,
+      [name] :value
     });
   };
 
@@ -27,12 +26,23 @@ function CreateTrip() {
     console.log(formData);
   }, [formData]);
 
-  const OnGenerateTrip = () => {
-    if (formData?.noOfdays > 5) {
-      alert("no of days should be less than 5");
+  const OnGenerateTrip = async () => {
+    if (formData?.noOfdays > 5&&!formData?.location||!formData?.budget||!formData?.NumberofTravelers) { 
+      toast("Please fill all the fields.")
       return;
     }
-    console.log(formData);
+    // console.log(formData);
+    const FINAL_PROMPT=AI_PROMPT
+    .replace('{location}',formData?.location)
+    .replace('{totalDays}',formData?.noOfdays)
+    .replace('{traveler}',formData?.NumberofTravelers)
+    .replace('{budget}',formData?.budget)
+    .replace('{totalDays}',formData?.noOfdays)
+
+    console.log(FINAL_PROMPT);
+
+    const result=await chatSession.sendMessage(FINAL_PROMPT);
+    console.log(result?.response?.text());
   };
   return (
     <div className="sm:px-10 md:px-32 lg:px-56 xl:px-10 px-5 mt-10">
@@ -54,7 +64,8 @@ function CreateTrip() {
               place,
               onChange: (v) => {
                 setPlace(v);
-                handleInpuChange("location");
+                // console.log(v);  
+                handleInputChange("location" , v?.label);
               },
             }}
           />
@@ -68,7 +79,7 @@ function CreateTrip() {
           <Input
             placeholder={"Ex.3"}
             type={"number"}
-            onChange={(e) => handleInpuChange("noOfdays", e.target.value)}
+            onChange={(e) => handleInputChange("noOfdays", e.target.value)}
           />
         </div>
       </div>
@@ -84,7 +95,7 @@ function CreateTrip() {
           {SelectBudgetOptions.map((item, index) => (
             <div
               key={index}
-              onClick={() => handleInpuChange("budget", item.title)}
+              onClick={() => handleInputChange("budget", item.title)}
               className={`p-4 border cursor-pointer rounded-lg hover:shadow-lg
                   ${
                     formData.budget === item.title && "shadow-lg border-black"
@@ -107,7 +118,7 @@ function CreateTrip() {
           {SelectTraveleroptions.map((item, index) => (
             <div
               key={index}
-              onClick={() => handleInpuChange("NumberofTravelers", item.people)}
+              onClick={() => handleInputChange("NumberofTravelers", item.people)}
               className={`p-4 border cursor-pointer rounded-lg hover:shadow-lg
                 ${
                   formData.NumberofTravelers === item.people &&
@@ -123,7 +134,7 @@ function CreateTrip() {
         </div>
       </div>
 
-      <div className="mt-20 items-center justify-center flex">
+      <div className="mt-10 items-center justify-center flex">
         <Button onClick={OnGenerateTrip}>Generate Trip</Button>
       </div>
     </div>

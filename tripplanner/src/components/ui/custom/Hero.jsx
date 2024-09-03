@@ -19,7 +19,7 @@ function Hero() {
         <Button>Get Started, It's Free!</Button>
       </Link>
     </div>
-  );
+  )
 }
 
 export default Hero;
